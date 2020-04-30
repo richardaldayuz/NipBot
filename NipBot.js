@@ -45,7 +45,25 @@ client.on("guildDelete", guild => {
   client.user.setActivity(`Serving ${client.guilds.size} servers`);
 });
 
+
+
+
+
+//List of all currently active sessions with INFO ABOUT THEM n stuff
 const activeSessions = [];
+var seshCounter = 0;
+
+function Session(dodo, price, user, time, ID){
+		this.dodoCode = dodo;
+		this.nipPrice = price;
+		this.user = user;
+		this.startTime = time;
+		this.ID = ID;
+}
+
+
+
+
 
 
 client.on("message", async message => {
@@ -68,6 +86,7 @@ client.on("message", async message => {
   
   // Let's go with a few common example commands! Feel free to delete or change those.
   
+  
   if(command === "startsession") {
 	//usage: !startsession dodoCode nipPrice
     if(args.length != 2){
@@ -75,8 +94,14 @@ client.on("message", async message => {
 	}else{
 		const dodoCode = args[0];
 		const nipPrice = args[1];
-		const sayMessage = args.join(" ");
-		message.channel.send(sayMessage);
+		const seshID = ++seshCounter;
+		//creating the session object and adding it to the activeSessions
+		let sesh = new Session(dodoCode, nipPrice, message.member., message.createdAt);
+		activeSessions.push(sesh);
+		
+		
+		message.channel.send("Session created! Type !endsession when you are ready to close your island.")
+		client.channels.get('694336316913090570').send(message.member + " has created a new session with price " + nipPrice + "bells! Type '!ticket " + sesh.ID + "' to reserve a spot in an upcoming boarding group!");
 	}
 	
   }
