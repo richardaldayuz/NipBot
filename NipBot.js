@@ -84,7 +84,6 @@ client.on("message", async message => {
   const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
   
-  // Let's go with a few common example commands! Feel free to delete or change those.
   
   
   if(command === "startsession") {
@@ -96,14 +95,27 @@ client.on("message", async message => {
 		const nipPrice = args[1];
 		const seshID = ++seshCounter;
 		//creating the session object and adding it to the activeSessions
-		let sesh = new Session(dodoCode, nipPrice, message.member., message.createdAt);
+		let sesh = new Session(dodoCode, nipPrice, message.member, message.createdAt, seshID);
 		activeSessions.push(sesh);
 		
 		
-		message.channel.send("Session created! Type !endsession when you are ready to close your island.")
-		client.channels.get('694336316913090570').send(message.member + " has created a new session with price " + nipPrice + "bells! Type '!ticket " + sesh.ID + "' to reserve a spot in an upcoming boarding group!");
+		message.channel.send("Session created! Type \'!endsession\' when you are ready to close your island.");
+		//client.channels.get('694336316913090570').send(message.member + " has created a new session with price " + nipPrice + "bells! Type \'!ticket " + sesh.ID + "\' to reserve a spot in an upcoming boarding group!");
+		message.channel.send(message.member + " has created a new session with price " + nipPrice + " bells! Type \'!ticket " + sesh.ID + "\' to reserve a spot in an upcoming boarding group!");
 	}
 	
+  }
+  
+  if(command === "activesessions") {
+	  let sayMessage = "Current active sessions:";
+	  for(let i = 0; i < activeSessions.length; i++){
+		sayMessage = sayMessage + "\nSession ID: " + activeSessions[i].ID + "  Host: " + activeSessions[i].user.displayName + "  Price: " + activeSessions[i].nipPrice;
+	  }
+	  message.channel.send(sayMessage);
+  }
+  
+  if(command === "endsession") {
+	  
   }
   
   if(command === "say") {
